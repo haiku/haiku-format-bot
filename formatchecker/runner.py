@@ -15,10 +15,12 @@ The module can run independently.
 import logging
 import sys
 import time
+import traceback
 from datetime import date, timedelta
 
 from .core import reformat_change
 from .gerrit import Context
+from .models import HashtagsInput
 
 _ALL_CHANGES_QUERY_OPTIONS = list([
     "status:open",
@@ -45,7 +47,13 @@ def format_changes(after: date, submit: bool = False):
     logger.info("Found %i changes" % len(changes))
 
     for change in reversed(changes):
-        reformat_change(context, change["id"], change["current_revision"], submit)
+        try:
+            reformat_change(context, change["id"], change["current_revision"], submit)
+        except RuntimeError as e:
+            logger.error("Error calling reformat_change:\n%s" % traceback.format_exc())
+            logger.info("Reformatting change failed, setting `format-bot-failed` hashtag to skip in future")
+            if submit:
+                context.set_hashtags(change["id"], HashtagsInput(add=["format-bot-failed"]))
 
 
 def daemon_mode(timeout: int, after: date, submit: bool = False):
