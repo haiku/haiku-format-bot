@@ -2,7 +2,7 @@ FROM python:3.14-slim AS haiku-format-build
 
 RUN apt-get update && apt-get install -y cmake g++ git ninja-build wget xz-utils
 
-RUN git clone https://github.com/owenca/haiku-format && cd haiku-format && git checkout 66b8a40 && /bin/bash ./build.sh
+RUN git clone https://github.com/owenca/haiku-format && cd haiku-format && git checkout 4458d29 && /bin/bash ./build.sh
 
 FROM python:3.14-slim
 
