@@ -16,5 +16,26 @@
 "lines_deleted": 51,
 "size_delta": -967,
 "size": 0
+},
+"src/file_renamed": {
+"status": "R",
+"old_path": "old/file_renamed",
+"lines_inserted": 2,
+"lines_deleted": 3,
+"size_delta": -30,
+"size": 314
+},
+"src/file_copied": {
+"status": "C",
+"old_path": "old/file_copied",
+"size_delta": 0,
+"size": 314
+},
+"src/file_rewritten": {
+"status": "W",
+"lines_inserted": 200,
+"lines_deleted": 300,
+"size_delta": -30,
+"size": 314
 }
 }

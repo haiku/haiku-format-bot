@@ -41,13 +41,53 @@ def context_get_mock(self, url: str, params=None):
         else:
             raise RuntimeError("Invalid request for src/file_implicitly_modified content")
     elif url =="changes/test_get_change/revisions/current/files/src%2Ffile_deleted/content":
-        # This file is modified, so there is new and parent contents
+        # This file is deleted, so only support getting the old contents
         if params is None:
             raise RuntimeError("The src/file_deleted file is deleted, so the patched version should not be requested")
         elif params == {"parent": "1"}:
             return "file_deleted line 1\nfile_deleted line 2\n"
         else:
             raise RuntimeError("Invalid request for src/file_implicitly_modified content")
+    elif url =="changes/test_get_change/revisions/current/files/src%2Ffile_renamed/content":
+        # This is the new path of a renamed file, so only support getting the new contents
+        if params is None:
+            return "file_renamed line 1\nfile_renamed base line 2\n"
+        elif params == {"parent": "1"}:
+            raise RuntimeError("The src/file_renamed file is added, so the base version should not be requested")
+        else:
+            raise RuntimeError("Invalid request for src/file_renamed content")
+    elif url =="changes/test_get_change/revisions/current/files/old%2Ffile_renamed/content":
+        # This is the old path of a renamed file, so only support getting the old contents
+        if params is None:
+            raise RuntimeError("The old/file_renamed file was renamed, so the patched version should not be requested")
+        elif params == {"parent": "1"}:
+            return "file_renamed line 1\nfile_renamed patched line 2\n"
+        else:
+            raise RuntimeError("Invalid request for old/file_renamed content")
+    elif url =="changes/test_get_change/revisions/current/files/src%2Ffile_copied/content":
+        # This is the new path of a copied file, so only support getting the new contents
+        if params is None:
+            return "file_copied line 1\nfile_copied base line 2\n"
+        elif params == {"parent": "1"}:
+            raise RuntimeError("The src/file_copied file is added, so the base version should not be requested")
+        else:
+            raise RuntimeError("Invalid request for src/file_copied content")
+    elif url =="changes/test_get_change/revisions/current/files/old%2Ffile_copied/content":
+        # This is the old path of a copied file, so only support getting the old contents
+        if params is None:
+            raise RuntimeError("The old/file_copied file was copied in this change, so the patched version should not be requested")
+        elif params == {"parent": "1"}:
+            return "file_copied line 1\nfile_copied patched line 2\n"
+        else:
+            raise RuntimeError("Invalid request for old/file_copied content")
+    elif url =="changes/test_get_change/revisions/current/files/src%2Ffile_rewritten/content":
+        # This file is modified, so there is new and parent contents
+        if params is None:
+            return "file_rewritten line 1\n2Ffile_rewritten base line 2\n"
+        elif params == {"parent": "1"}:
+            return "file_rewritten line 1\n2Ffile_rewritten patched line 2\n"
+        else:
+            raise RuntimeError("Invalid request for src/file_rewritten content")
     raise ValueError("Input URL is not mocked: %s" % url)
 
 
